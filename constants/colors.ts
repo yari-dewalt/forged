@@ -1,0 +1,17 @@
+export const colors = {
+    brand: '#DAA520', //'#00ABC9',
+    background: '#000000',
+    primaryAccent: '#0d0d0d',
+    secondaryAccent: '#121212', //'#262626',
+    primaryText: '#FFFFFF',
+    secondaryText: '#D7D7D7',
+    placeholderText: 'rgba(215, 215, 215, 0.5)',
+    notification: '#bf2e2e',
+    success: '#22c55e',
+    overlay: 'rgba(0, 0, 0, 0.6)',
+    whiteOverlay: 'rgba(255, 255, 255, 0.1)',
+    whiteOverlayLight: 'rgba(255, 255, 255, 0.05)',
+    customBadgeBg: 'rgba(155, 89, 182, 0.2)',
+    customBadgeBorder: 'rgba(155, 89, 182, 0.5)',
+    customBadgeText: '#9B59B6',
+}
