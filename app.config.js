@@ -65,14 +65,6 @@ export default {
       ],
       [
         "expo-background-fetch"
-      ],
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "react-native", 
-          "organization": "yari-dewalt"
-        }
       ]
     ]
   },
