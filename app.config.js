@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export default {
   expo: {
     name: "atlas",
@@ -15,10 +17,12 @@ export default {
     },
     ios: {
       bundleIdentifier: "com.atlasfitness.atlas",
+      buildNumber: "2",
       supportsTablet: false,
       orientation: "portrait",
       infoPlist: {
-        UIBackgroundModes: ["audio", "remote-notification", "fetch"]
+        UIBackgroundModes: ["audio", "remote-notification", "fetch"],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     android: {
