@@ -497,7 +497,7 @@ const Post = ({ data, onDelete, isDetailView = false }) => {
       // Once the app is on the app store, this can be updated to deep link
       const shareUrl = `https://atlas-app.com/post/${data.id}`;
       const shareTitle = data.title || `${data.user.full_name || data.user.username || 'Someone'}'s workout`;
-      const shareMessage = data.text ? `${shareTitle}\n\n${data.text}` : shareTitle;
+      const shareMessage = `Check out this post from ${data.user.username} on Atlas!`;
 
       const result = await Share.share({
         message: `${shareMessage}\n\n${shareUrl}`,
