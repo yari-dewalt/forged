@@ -173,7 +173,7 @@ export default function AppLayout() {
           name="explore"
           options={{
             tabBarLabel: createTabBarLabel('Explore'),
-            tabBarIcon: createTabBarIcon(({ color }) => <IonIcon name="search" size={28} color={color} />),
+            tabBarIcon: createTabBarIcon(({ color }) => <IonIcon name="globe-outline" size={28} color={color} />),
           }}
           listeners={{
             tabPress: (e) => {
