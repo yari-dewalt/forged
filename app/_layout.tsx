@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { supabase } from '../lib/supabase';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text, Animated, StyleSheet, Image } from 'react-native';
 import { useAuthStore } from '../stores/authStore';
 import { useOnboardingStore } from '../stores/onboardingStore';
 import { useNotificationStore } from '../stores/notificationStore';
@@ -21,6 +21,10 @@ export default function RootLayout() {
   
   const segments = useSegments();
   const router = useRouter();
+  
+  // Animation refs
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const contentOpacity = useRef(new Animated.Value(0)).current;
 
   // Check if the path is in different groups
   const inAppGroup = segments[0] === '(app)';
@@ -124,22 +128,76 @@ export default function RootLayout() {
     }
   }, [session, segments, loading, onboardingLoading, isOnboardingComplete, isInOnboardingFlow]);
 
-  // Show loading indicator while checking auth or onboarding (only when we have a session)
+  // Handle fade-in animation when loading completes
+  useEffect(() => {
+    if (!loading && !(session && onboardingLoading)) {
+      // Fade out logo
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        // Fade in content
+        Animated.timing(contentOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      });
+    } else {
+      // Show logo
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, session, onboardingLoading, fadeAnim, contentOpacity]);
+
+  // Show loading screen with Atlas logo
   if (loading || (session && onboardingLoading)) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={colors.brand} />
+      <View style={styles.loadingContainer}>
+        <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
+          <Image 
+            source={require('../assets/logo/word.png')} 
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+        </Animated.View>
       </View>
     );
   }
 
   // No need for Context.Provider when using Zustand
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(app)" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(legal)" />
-      <Stack.Screen name="(onboarding)" />
-    </Stack>
+    <Animated.View style={[styles.container, { opacity: contentOpacity }]}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(app)" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(legal)" />
+        <Stack.Screen name="(onboarding)" />
+      </Stack>
+    </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoImage: {
+    width: 400,
+    height: 180,
+  },
+});
