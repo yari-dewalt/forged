@@ -1342,7 +1342,7 @@ const handleTimerCompletion = async () => {
             }}
           >
             <View style={styles.floatingTimerLeft}>
-              <IonIcon name="time-outline" size={18} color={colors.secondaryText} />
+              <IonIcon name="time-outline" size={20} color={colors.secondaryText} />
               <Text style={[
                 styles.floatingTimerText,
                 workoutSettings.largeTimerDisplay && styles.largeFloatingTimerText
@@ -1362,7 +1362,7 @@ const handleTimerCompletion = async () => {
               >
                 <IonIcon
                   name={isPaused ? "play-outline" : "pause-outline"}
-                  size={16}
+                  size={20}
                   color={colors.brand}
                 />
               </TouchableOpacity>
@@ -3302,7 +3302,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 0,
   },
   editIcon: {
     marginLeft: 6,
@@ -4401,7 +4401,7 @@ pickerContainer: {
 
   floatingTimerRibbon: {
     position: 'absolute',
-    top: 94, // Below the header
+    top: 98, // Below the header
     left: 0,
     right: 0,
     zIndex: 1,
@@ -4420,6 +4420,7 @@ pickerContainer: {
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    paddingLeft: 24,
     paddingVertical: 12,
   },
 
