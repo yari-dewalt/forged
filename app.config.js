@@ -17,12 +17,14 @@ export default {
     },
     ios: {
       bundleIdentifier: "com.atlasfitness.atlas",
-      buildNumber: "16",
       supportsTablet: false,
       orientation: "portrait",
       infoPlist: {
         UIBackgroundModes: ["audio", "remote-notification", "fetch"],
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        NSCameraUsageDescription: "This app uses the camera to take photos and videos for your fitness posts and progress tracking.",
+        NSPhotoLibraryUsageDescription: "This app needs access to your photo library to select and share photos and videos for your fitness posts.",
+        NSMicrophoneUsageDescription: "This app uses the microphone to record audio for videos in your fitness posts."
       }
     },
     android: {
@@ -30,7 +32,14 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
       },
-      permissions: ["VIBRATE", "WAKE_LOCK"],
+      permissions: [
+        "VIBRATE", 
+        "WAKE_LOCK",
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       orientation: "portrait"
     },
     notification: {
