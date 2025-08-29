@@ -352,7 +352,7 @@ export default function NotificationSettingsScreen() {
         </View>
 
         {/* Test Notifications Section - Only show in development or if push notifications are enabled */}
-        {(__DEV__ || pushNotificationsEnabled) && (
+        {/* {(__DEV__ || pushNotificationsEnabled) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Test Push Notifications</Text>
             <Text style={styles.testDescription}>
@@ -427,7 +427,7 @@ export default function NotificationSettingsScreen() {
               </View>
             )}
           </View>
-        )}
+        )} */}
 
         {/* Footer note */}
         <View style={styles.footerContainer}>

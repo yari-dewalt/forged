@@ -209,7 +209,7 @@ export default function Login() {
         disabled={true}
       >
         <IonIcon name="logo-google" size={24} color={colors.secondaryText} />
-        <Text style={[styles.socialButtonText, styles.textDisabled]}>Continue With Google (Disabled in Expo Go)</Text>
+        <Text style={[styles.socialButtonText, styles.textDisabled]}>Continue With Google (Disabled)</Text>
       </TouchableOpacity>
     </View>
     </TouchableWithoutFeedback>

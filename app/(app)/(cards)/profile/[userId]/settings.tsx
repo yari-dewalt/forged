@@ -161,7 +161,7 @@ export default function SettingsScreen() {
             </View>
             
             {/* Developer Section */}
-            <View style={styles.section}>
+            {/* <View style={styles.section}>
               <Text style={styles.sectionTitle}>Developer</Text>
               
               <TouchableOpacity
@@ -175,7 +175,7 @@ export default function SettingsScreen() {
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={colors.secondaryText} />
               </TouchableOpacity>
-            </View>
+            </View> */}
             
             <TouchableOpacity
                 activeOpacity={0.5} 
