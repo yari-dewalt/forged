@@ -17,7 +17,7 @@ export default {
     },
     ios: {
       bundleIdentifier: "com.atlasfitness.atlas",
-      buildNumber: "2",
+      buildNumber: "16",
       supportsTablet: false,
       orientation: "portrait",
       infoPlist: {
