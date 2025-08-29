@@ -608,19 +608,26 @@ export default function ExerciseSelection() {
     
     // Check if we came from routine editing
     if (params?.fromRoutineEdit && params?.routineId) {
+      // Can't use router.back() followed by setting params, so go back and then navigate directly
       router.back();
-      router.setParams({ 
-        selectedExercises: JSON.stringify(exercisesToAdd),
-        isMultiple: 'true',
-        fromRoutineEdit: 'true',
+      router.navigate({
+        pathname: `/(app)/(modals)/editRoutine/${params.routineId}`,
+        params: { 
+          selectedExercises: JSON.stringify(exercisesToAdd),
+          isMultiple: 'true',
+          fromRoutineEdit: 'true',
+        }
       });
     } else {
-      // Original behavior for other flows
+      // Can't use router.back() followed by setting params, so go back and then navigate directly
       router.back();
-      router.setParams({ 
-        selectedExercises: JSON.stringify(exercisesToAdd),
-        isMultiple: 'true'
-      });
+      router.navigate({
+        pathname: '/(app)/(modals)/newWorkout',
+        params: {
+          selectedExercises: JSON.stringify(exercisesToAdd),
+          isMultiple: 'true',
+        }
+      })
     }
   };
 
