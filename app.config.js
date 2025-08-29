@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "atlas",
+    name: "Atlas",
     slug: "atlas",
     scheme: "atlas",
     version: "1.0.0",
