@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Alert, Linking, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Alert, Linking, TouchableOpacity, Image } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../../../constants/colors';
+import { XIcon } from '../../../../components/icons/XIcon';
 
 export default function AboutScreen() {
   const router = useRouter();
@@ -36,10 +37,13 @@ export default function AboutScreen() {
       />
       
       <ScrollView style={styles.container}>
-        {/* Banner Placeholder */}
-        <View style={styles.bannerPlaceholder}>
-          <Ionicons name="image-outline" size={48} color={colors.secondaryText} />
-          <Text style={styles.bannerText}>Atlas Banner</Text>
+        {/* Atlas Logo Banner */}
+        <View style={styles.bannerContainer}>
+          <Image 
+            source={require('../../../../assets/logo/word.png')} 
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Social Section */}
@@ -84,12 +88,36 @@ export default function AboutScreen() {
           
           <TouchableOpacity
                 activeOpacity={0.5} 
-            style={[styles.settingItem, styles.lastSettingItem]}
-            onPress={() => handleSocialPress('Twitter', 'https://twitter.com/atlasfitnessapp')}
+            style={styles.settingItem}
+            onPress={() => handleSocialPress('X', 'https://x.com/atlasfitnessapp')}
           >
             <View style={styles.settingTextContainer}>
-              <Ionicons name="logo-twitter" size={22} color={colors.primaryText} />
-              <Text style={styles.settingText}>Twitter</Text>
+              <XIcon size={22} color={colors.primaryText} />
+              <Text style={styles.settingText}>X</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.secondaryText} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+                activeOpacity={0.5} 
+            style={styles.settingItem}
+            onPress={() => handleSocialPress('Threads', 'https://threads.net/@atlasfitness.app')}
+          >
+            <View style={styles.settingTextContainer}>
+              <Ionicons name="at" size={22} color={colors.primaryText} />
+              <Text style={styles.settingText}>Threads</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.secondaryText} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+                activeOpacity={0.5} 
+            style={[styles.settingItem, styles.lastSettingItem]}
+            onPress={() => handleSocialPress('Bluesky', 'https://bsky.app/profile/atlasfitness.bsky.social')}
+          >
+            <View style={styles.settingTextContainer}>
+              <Ionicons name="cloud-outline" size={22} color={colors.primaryText} />
+              <Text style={styles.settingText}>Bluesky</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.secondaryText} />
           </TouchableOpacity>
@@ -167,17 +195,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  bannerPlaceholder: {
+  bannerContainer: {
     height: 120,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
   },
-  bannerText: {
-    fontSize: 16,
-    color: colors.secondaryText,
-    marginTop: 8,
+  logoImage: {
+    width: 200,
+    height: 100,
   },
   section: {
     marginBottom: 24,
