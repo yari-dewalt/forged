@@ -4,7 +4,7 @@ export const FOUNDER_USER_IDS = [
   // Example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
   // These should be replaced with the actual Supabase user IDs of the founders
   '48501e5b-2e50-4187-b2cc-3b8ad20e1fa1', // Yari
-  '2e67d4a9-409c-4329-91dc-8d6f18b20834', // Elijah
+  '6106f9a5-c78e-4d1d-85eb-b37a50f1ae6e', // Elijah
   '2f883a74-65f8-4890-81fe-0d2e4c1241a5', // Zoey
 ];
 
