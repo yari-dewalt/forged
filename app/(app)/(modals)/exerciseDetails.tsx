@@ -10,6 +10,7 @@ import {
   Dimensions,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -37,10 +38,10 @@ export default function ExerciseDetails() {
   // Detect if we're in a fullscreen modal by checking the route
   // If we're coming from a workout, selection, or routine modal, we're likely in fullscreen
   const isInFullscreenModal = fromWorkout || fromSelection || fromRoutineEdit;
-  console.log('Is in fullscreen modal:', isInFullscreenModal);
 
-  // Calculate header padding based on context
-  const headerPaddingTop = isInFullscreenModal ? 16 : insets.top + 16;
+  // Calculate header padding based on context and platform
+  const headerPaddingTop = Platform.OS === 'android' && isInFullscreenModal ? 48 : 
+                          isInFullscreenModal ? 16 : insets.top + 16;
 
   useEffect(() => {
     if (exerciseId) {

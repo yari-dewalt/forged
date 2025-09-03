@@ -1,5 +1,5 @@
 import { router, Stack, useLocalSearchParams, usePathname, useRouter } from 'expo-router';
-import { View, Text, SafeAreaView, Pressable, StyleSheet, Animated, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, Pressable, StyleSheet, Animated, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -301,7 +301,7 @@ const TopNavBar = () => {
   
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+      <View style={ Platform.OS === 'ios' ? styles.header : styles.headerAndroid }>
         {/* LEFT SIDE */}
         {!isWorkoutMainRoute && (
           <View style={styles.headerLeft}>
@@ -321,7 +321,7 @@ const TopNavBar = () => {
             ) : (
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={styles.headerButton}
+                style={[styles.headerButton, Platform.OS === 'ios' ? '' : { marginTop: 0 }]}
                 onPress={() => router.push('/editPost/new')}
               >
                 <Ionicons 
@@ -366,16 +366,18 @@ const TopNavBar = () => {
           return <Text style={styles.headerTitle}>{title}</Text>;
         })(        ) : isProfileRoute && !isMainProfilePage ? (
           <View style={styles.profileSubrouteContainer}>
-            <Text style={styles.headerTitle}>{title}</Text>
+            <Text style={[styles.headerTitle, Platform.OS === 'ios' ? '' : { paddingBottom: 60 }]}>
+              {title}
+            </Text>
             {/* Only show username if it's not the current user's profile */}
             {userId === currentProfile?.id && userId !== authProfile?.id && (
-              <Text style={styles.profileUsername}>
+              <Text style={[styles.profileUsername, Platform.OS === 'ios' ? '' : { marginTop: -21, marginBottom: 6 }]}>
                 {currentProfile.username || 'User'}
               </Text>
             )}
           </View>
         ) : (
-          <Text style={styles.headerTitle}>{title}</Text>
+          <Text style={[styles.headerTitle, Platform.OS === 'ios' ? '' : { paddingBottom: 20 }]}>{title}</Text>
         )}
         
         {/* RIGHT SIDE */}
@@ -557,10 +559,13 @@ const TopNavBar = () => {
 };
 
 export default function AppLayout() {
+  const pathname = usePathname().toLowerCase();
+  const isFullScreenModal = pathname.includes('editpost') || pathname.includes('editroutine') || pathname.includes('newworkout') || pathname.includes('custom') || pathname.includes('exercisedetails') || pathname.includes('exerciseselection') || pathname.includes('messages') || pathname.includes('newpost') || pathname.includes('newroutine') || pathname.includes('workoutsettings') || pathname.includes('saveworkout');
+  
   return (
     <View style={styles.container}>
-      <TopNavBar />
-      
+      {!(Platform.OS === 'android' && isFullScreenModal) && <TopNavBar />}
+
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen 
@@ -598,10 +603,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.whiteOverlayLight,
   },
+  headerAndroid: {
+    height: 120,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    paddingHorizontal: 8,
+    paddingBottom: 10,
+    backgroundColor: colors.primaryAccent,
+    position: 'relative',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlayLight,
+  },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 70,
+    marginRight: 'auto',
     zIndex: 1,
   },
   headerTitle: {

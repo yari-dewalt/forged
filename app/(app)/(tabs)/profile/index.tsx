@@ -1639,6 +1639,7 @@ export default function ProfileScreen() {
           </View>
         </View>
       </ScrollView>
+      <View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -1665,6 +1666,7 @@ export default function ProfileScreen() {
           </View>
         </View>
       </Modal>
+      </View>
 
       {/* Bottom Sheets */}
       <BottomSheet

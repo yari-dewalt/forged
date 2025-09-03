@@ -47,6 +47,7 @@ export default function EditProfileScreen() {
   const weightUnitOptionsSnapPoints = useMemo(() => ['25%'], []);
   
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [showAndroidDatePicker, setShowAndroidDatePicker] = useState(false);
   const datePickerBottomSheetRef = useRef<BottomSheet>(null);
   const datePickerSnapPoints = useMemo(() => ['40%'], []);
   
@@ -176,6 +177,7 @@ export default function EditProfileScreen() {
   const handleDatePickerSheetChanges = useCallback((index: number) => {
     if (index === -1) {
       setDatePickerVisible(false);
+      setShowAndroidDatePicker(false);
     }
   }, []);
 
@@ -196,8 +198,18 @@ export default function EditProfileScreen() {
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    if (selectedDate) {
-      setDateOfBirth(selectedDate);
+    if (Platform.OS === 'android') {
+      setShowAndroidDatePicker(false);
+      if (event.type === 'set' && selectedDate) {
+        setDateOfBirth(selectedDate);
+      }
+      // Close the bottom sheet after handling the date
+      datePickerBottomSheetRef.current?.close();
+    } else {
+      // iOS behavior
+      if (selectedDate) {
+        setDateOfBirth(selectedDate);
+      }
     }
   };
 
@@ -217,6 +229,12 @@ export default function EditProfileScreen() {
   const handleDatePress = () => {
     setDatePickerVisible(true);
     datePickerBottomSheetRef.current?.expand();
+    // Small delay to ensure bottom sheet is open before showing Android picker
+    if (Platform.OS === 'android') {
+      setTimeout(() => {
+        setShowAndroidDatePicker(true);
+      }, 100);
+    }
   };
 
   const selectFromLibrary = async () => {
@@ -511,25 +529,37 @@ export default function EditProfileScreen() {
         snapPoints={datePickerSnapPoints}
         onChange={handleDatePickerSheetChanges}
         enablePanDownToClose={true}
-        backgroundStyle={styles.bottomSheetBackground}
-        handleIndicatorStyle={styles.bottomSheetIndicator}
+        backgroundStyle={[styles.bottomSheetBackground, Platform.OS === 'android' && { opacity: 0 }]}
+        handleIndicatorStyle={[styles.bottomSheetIndicator, Platform.OS === 'android' && { opacity: 0 }]}
         backdropComponent={renderBackdrop}
       >
-        <BottomSheetView style={styles.photoOptionsModalContent}>
+        <BottomSheetView style={[styles.photoOptionsModalContent, Platform.OS === 'android' && { opacity: 0 }]}>
           <Text style={styles.photoOptionsTitle}>Select Date of Birth</Text>
           <Text style={styles.photoOptionsSubtitle}>
             Choose your date of birth
           </Text>
           
           <View style={styles.datePickerContent}>
-            <DateTimePicker
-              value={dateOfBirth || new Date()}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={handleDateChange}
-              maximumDate={new Date()}
-              style={styles.datePicker}
-            />
+            {(Platform.OS === 'ios' || showAndroidDatePicker) && (
+              <DateTimePicker
+                value={dateOfBirth || new Date()}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={handleDateChange}
+                maximumDate={new Date()}
+                style={styles.datePicker}
+              />
+            )}
+            {Platform.OS === 'android' && !showAndroidDatePicker && (
+              <TouchableOpacity
+                style={styles.androidDateButton}
+                onPress={() => setShowAndroidDatePicker(true)}
+              >
+                <Text style={styles.androidDateButtonText}>
+                  {dateOfBirth ? formatDate(dateOfBirth) : 'Select Date'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </BottomSheetView>
       </BottomSheet>
@@ -726,5 +756,17 @@ const styles = StyleSheet.create({
   datePickerContent: {
     paddingHorizontal: 20,
     paddingBottom: 20,
+  },
+  androidDateButton: {
+    backgroundColor: colors.brand,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  androidDateButtonText: {
+    color: colors.primaryText,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

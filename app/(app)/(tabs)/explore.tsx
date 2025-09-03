@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, TextInput, Pressable, TouchableOpacity, SafeAreaView, Animated, ActivityIndicator, RefreshControl, Keyboard } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TextInput, Pressable, TouchableOpacity, SafeAreaView, Animated, ActivityIndicator, RefreshControl, Keyboard, Platform } from "react-native";
 import { colors } from "../../../constants/colors";
 import Post from "../../../components/Post/Post";
 import { useRouter, useFocusEffect } from "expo-router";
@@ -163,10 +163,20 @@ export default function Explore() {
     }
   }, [isSearchFocused]);
 
-  // Refresh recent searches when search overlay opens
+  // Refresh recent searches when search overlay opens and reset state when leaving
   useFocusEffect(
     useCallback(() => {
       loadRecentSearches();
+      
+      // Return a cleanup function that runs when the tab loses focus
+      return () => {
+        // Reset search state when navigating away from explore tab
+        setIsSearchFocused(false);
+        setSearchQuery('');
+        setSearchResults([]);
+        setSearchLoading(false);
+        Keyboard.dismiss();
+      };
     }, [])
   );
   
@@ -843,24 +853,11 @@ export default function Explore() {
       >
         <SafeAreaView style={styles.searchOverlay}>
           <View style={styles.searchHeaderContainer}>
-            <TouchableOpacity
-                activeOpacity={0.5} 
-              onPress={() => {
-                Keyboard.dismiss();
-                setIsSearchFocused(false);
-                setSearchQuery('');
-                setSearchResults([]);
-                setSearchLoading(false);
-              }}
-              style={styles.backButton}
-            >
-              <IonIcon name="chevron-back" size={24} color={colors.primaryText} />
-            </TouchableOpacity>
-            <View style={styles.searchOverlayInputContainer}>
+            <View style={[styles.searchOverlayInputContainer, Platform.OS === 'ios' ? {} : { paddingVertical: 2 }]}>
               <IonIcon name="search" size={20} color={colors.secondaryText} />
               <TextInput
                 ref={searchInputRef}
-                style={styles.searchOverlayInput}
+                style={[styles.searchOverlayInput, Platform.OS === 'ios' ? {} : { marginLeft: 4 }]}
                 placeholder="Search members..."
                 placeholderTextColor={colors.secondaryText}
                 value={searchQuery}
@@ -883,6 +880,19 @@ export default function Explore() {
                 </TouchableOpacity>
               )}
             </View>
+            <TouchableOpacity
+                activeOpacity={0.5} 
+              onPress={() => {
+                Keyboard.dismiss();
+                setIsSearchFocused(false);
+                setSearchQuery('');
+                setSearchResults([]);
+                setSearchLoading(false);
+              }}
+              style={styles.cancelButton}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
           
           <ScrollView style={styles.searchContentContainer}>
@@ -957,7 +967,7 @@ const styles = StyleSheet.create({
   },
   searchInputPressable: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 8,
     paddingVertical: 8,
     justifyContent: 'center',
   },
@@ -979,7 +989,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.whiteOverlay,
     flex: 1,
-    marginLeft: 12,
   },
   searchOverlayInput: {
     flex: 1,
@@ -1120,8 +1129,13 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     borderBottomWidth: 1,
     borderBottomColor: colors.whiteOverlay,
+    gap: 12,
   },
-  backButton: {
+  cancelButton: {
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    color: colors.primaryText,
   },
   noResultsText: {
     color: colors.secondaryText,

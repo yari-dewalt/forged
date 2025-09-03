@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,6 +24,10 @@ const RECENT_EXERCISES_KEY = 'recent_exercises';
 export default function CreateCustomExercise() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  
+  // Check if we're coming from a fullscreen modal based on params
+  const isInFullScreenModal = params?.fromRoutineEdit === 'true' || 
+                             params?.fromNewWorkout === 'true';
   
   const suggestedName = Array.isArray(params.suggestedName) ? params.suggestedName[0] : params.suggestedName;
   const [exerciseName, setExerciseName] = useState(suggestedName || '');
@@ -250,12 +255,16 @@ export default function CreateCustomExercise() {
   };
 
   const isFormValid = exerciseName.trim() && primaryMuscleGroup !== 'None';
+  console.log(Platform.OS === 'android' && isInFullScreenModal);
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[
+          styles.header,
+          Platform.OS === 'android' && isInFullScreenModal && styles.headerAndroidFullScreen
+        ]}>
           <TouchableOpacity
                 activeOpacity={0.5} onPress={() => router.back()} style={styles.headerButton}>
             <Text style={styles.cancelText}>Cancel</Text>
@@ -523,6 +532,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingTop: 16,
     paddingHorizontal: 12,
+  },
+
+  headerAndroidFullScreen: {
+    paddingTop: 52, // Extra padding for Android when in fullscreen modal
   },
 
 headerButton: {

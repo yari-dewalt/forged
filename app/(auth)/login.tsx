@@ -174,6 +174,7 @@ export default function Login() {
           onChangeText={onChangeEmail}
           value={email}
           placeholder="example@example.com"
+          placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
         />
       </View>
       <View style={styles.inputContainer}>

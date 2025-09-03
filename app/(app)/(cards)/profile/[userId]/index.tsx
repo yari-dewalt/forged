@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, Modal, TouchableOpacity, Platform } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { colors } from '../../../../../constants/colors';
@@ -1636,6 +1636,7 @@ export default function ProfileScreen() {
           </View>
         </View>
       </ScrollView>
+      <View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -1662,6 +1663,7 @@ export default function ProfileScreen() {
           </View>
         </View>
       </Modal>
+      </View>
 
       {/* Bottom Sheets */}
       <BottomSheet

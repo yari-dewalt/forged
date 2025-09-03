@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, Alert, FlatList, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, Alert, FlatList, Keyboard, TouchableWithoutFeedback, TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -294,7 +294,7 @@ export default function SearchCommunity() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.content}>
         <View style={styles.header}>
-        <View style={styles.searchContainer}>
+        <View style={[styles.searchContainer, Platform.OS === 'ios' ? { } : { paddingVertical: 2 }]}>
           <Ionicons name="search" size={20} color={colors.secondaryText} />
           <TextInput
             style={styles.searchInput}

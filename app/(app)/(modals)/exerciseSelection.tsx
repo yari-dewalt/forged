@@ -789,7 +789,11 @@ export default function ExerciseSelection() {
     onPress={() => {
       router.push({
         pathname: '/(app)/(modals)/createCustomExercise',
-        params: {}
+        params: { 
+          fromRoutineEdit: params?.fromRoutineEdit,
+          fromNewWorkout: params?.fromNewWorkout,
+          routineId: params?.routineId,
+        }
       });
     }} 
     style={styles.headerButton}
@@ -910,7 +914,12 @@ export default function ExerciseSelection() {
                     onPress={() => {
                       router.push({
                         pathname: '/(app)/(modals)/createCustomExercise',
-                        params: { suggestedName: searchQuery }
+                        params: { 
+                          suggestedName: searchQuery,
+                          fromRoutineEdit: params?.fromRoutineEdit,
+                          fromNewWorkout: params?.fromNewWorkout,
+                          routineId: params?.routineId,
+                        }
                       });
                     }}
                   >

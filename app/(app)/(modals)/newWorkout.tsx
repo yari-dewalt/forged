@@ -694,7 +694,10 @@ const handleRemoveExercise = () => {
   };
 
   const handleAddExercise = () => {
-    router.push('/(app)/(modals)/exerciseSelection');
+    router.push({
+      pathname: '/(app)/(modals)/exerciseSelection',
+      params: { fromNewWorkout: 'true' }
+    });
   };
   
   // Add function to update set values
@@ -1764,7 +1767,7 @@ const handleTimerCompletion = async () => {
         <View style={styles.hiddenItem}>
           <TouchableOpacity
                 activeOpacity={0.5}
-            style={styles.deleteButton}
+            style={[styles.deleteButton, Platform.OS === 'ios' ? {} : { bottom: 1, right: 2 }]}
             onPress={() => {
               // Start simple fade out animation
               Animated.timing(deletionAnim, {
@@ -2044,6 +2047,7 @@ const handleTimerCompletion = async () => {
         )}
       </ScrollView>
 
+      <View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -2068,56 +2072,160 @@ const handleTimerCompletion = async () => {
                 <View style={styles.pickerContainer}>
                   <View style={styles.pickerColumn}>
                     <Text style={styles.pickerLabel}>Hours</Text>
-                    <Picker
-                      selectedValue={manualHours}
-                      onValueChange={(value) => setManualHours(value)}
-                      style={styles.picker}
-                      itemStyle={styles.pickerItem}
-                    >
-                      {Array.from({ length: 24 }, (_, i) => (
-                        <Picker.Item 
-                          key={i} 
-                          label={i.toString().padStart(2, '0')} 
-                          value={i.toString().padStart(2, '0')} 
-                        />
-                      ))}
-                    </Picker>
+                    {Platform.OS === 'ios' ? (
+                      <Picker
+                        selectedValue={manualHours}
+                        onValueChange={(value) => setManualHours(value)}
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
+                      >
+                        {Array.from({ length: 24 }, (_, i) => (
+                          <Picker.Item 
+                            key={i} 
+                            label={i.toString().padStart(2, '0')} 
+                            value={i.toString().padStart(2, '0')} 
+                          />
+                        ))}
+                      </Picker>
+                    ) : (
+                      <FlatList
+                        data={Array.from({ length: 24 }, (_, i) => ({
+                          value: i.toString().padStart(2, '0'),
+                          label: i.toString().padStart(2, '0')
+                        }))}
+                        keyExtractor={(item) => item.value}
+                        style={styles.androidInlinePicker}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            style={[
+                              styles.androidInlinePickerItem,
+                              item.value === manualHours && styles.androidInlinePickerItemSelected
+                            ]}
+                            onPress={() => setManualHours(item.value)}
+                          >
+                            <Text style={[
+                              styles.androidInlinePickerText,
+                              item.value === manualHours && styles.androidInlinePickerTextSelected
+                            ]}>
+                              {item.label}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        getItemLayout={(data, index) => ({
+                          length: 40,
+                          offset: 40 * index,
+                          index,
+                        })}
+                        onScrollToIndexFailed={() => {}}
+                      />
+                    )}
                   </View>
                   
                   <View style={styles.pickerColumn}>
                     <Text style={styles.pickerLabel}>Minutes</Text>
-                    <Picker
-                      selectedValue={manualMinutes}
-                      onValueChange={(value) => setManualMinutes(value)}
-                      style={styles.picker}
-                      itemStyle={styles.pickerItem}
-                    >
-                      {Array.from({ length: 60 }, (_, i) => (
-                        <Picker.Item 
-                          key={i} 
-                          label={i.toString().padStart(2, '0')} 
-                          value={i.toString().padStart(2, '0')} 
-                        />
-                      ))}
-                    </Picker>
+                    {Platform.OS === 'ios' ? (
+                      <Picker
+                        selectedValue={manualMinutes}
+                        onValueChange={(value) => setManualMinutes(value)}
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
+                      >
+                        {Array.from({ length: 60 }, (_, i) => (
+                          <Picker.Item 
+                            key={i} 
+                            label={i.toString().padStart(2, '0')} 
+                            value={i.toString().padStart(2, '0')} 
+                          />
+                        ))}
+                      </Picker>
+                    ) : (
+                      <FlatList
+                        data={Array.from({ length: 60 }, (_, i) => ({
+                          value: i.toString().padStart(2, '0'),
+                          label: i.toString().padStart(2, '0')
+                        }))}
+                        keyExtractor={(item) => item.value}
+                        style={styles.androidInlinePicker}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            style={[
+                              styles.androidInlinePickerItem,
+                              item.value === manualMinutes && styles.androidInlinePickerItemSelected
+                            ]}
+                            onPress={() => setManualMinutes(item.value)}
+                          >
+                            <Text style={[
+                              styles.androidInlinePickerText,
+                              item.value === manualMinutes && styles.androidInlinePickerTextSelected
+                            ]}>
+                              {item.label}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        getItemLayout={(data, index) => ({
+                          length: 40,
+                          offset: 40 * index,
+                          index,
+                        })}
+                        onScrollToIndexFailed={() => {}}
+                      />
+                    )}
                   </View>
                   
                   <View style={styles.pickerColumn}>
                     <Text style={styles.pickerLabel}>Seconds</Text>
-                    <Picker
-                      selectedValue={manualSeconds}
-                      onValueChange={(value) => setManualSeconds(value)}
-                      style={styles.picker}
-                      itemStyle={styles.pickerItem}
-                    >
-                      {Array.from({ length: 60 }, (_, i) => (
-                        <Picker.Item 
-                          key={i} 
-                          label={i.toString().padStart(2, '0')} 
-                          value={i.toString().padStart(2, '0')} 
-                        />
-                      ))}
-                    </Picker>
+                    {Platform.OS === 'ios' ? (
+                      <Picker
+                        selectedValue={manualSeconds}
+                        onValueChange={(value) => setManualSeconds(value)}
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
+                        mode="dialog"
+                      >
+                        {Array.from({ length: 60 }, (_, i) => (
+                          <Picker.Item 
+                            key={i} 
+                            label={i.toString().padStart(2, '0')} 
+                            value={i.toString().padStart(2, '0')} 
+                            style={{ fontSize: 18}}
+                          />
+                        ))}
+                      </Picker>
+                    ) : (
+                      <FlatList
+                        data={Array.from({ length: 60 }, (_, i) => ({
+                          value: i.toString().padStart(2, '0'),
+                          label: i.toString().padStart(2, '0')
+                        }))}
+                        keyExtractor={(item) => item.value}
+                        style={styles.androidInlinePicker}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            style={[
+                              styles.androidInlinePickerItem,
+                              item.value === manualSeconds && styles.androidInlinePickerItemSelected
+                            ]}
+                            onPress={() => setManualSeconds(item.value)}
+                          >
+                            <Text style={[
+                              styles.androidInlinePickerText,
+                              item.value === manualSeconds && styles.androidInlinePickerTextSelected
+                            ]}>
+                              {item.label}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        getItemLayout={(data, index) => ({
+                          length: 40,
+                          offset: 40 * index,
+                          index,
+                        })}
+                        onScrollToIndexFailed={() => {}}
+                      />
+                    )}
                   </View>
                 </View>
                 
@@ -2143,7 +2251,9 @@ const handleTimerCompletion = async () => {
           </View>
         </Pressable>
       </Modal>
+      </View>
 
+      <View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -2343,6 +2453,7 @@ const handleTimerCompletion = async () => {
           </View>
         </Pressable>
       </Modal>
+      </View>
 
       {/* Exercise Options Bottom Sheet */}
 <BottomSheet
@@ -2690,6 +2801,7 @@ const handleTimerCompletion = async () => {
           backgroundStyle={styles.bottomSheetBackground}
           handleIndicatorStyle={styles.bottomSheetIndicator}
           backdropComponent={renderBackdrop}
+          enableContentPanningGesture={false}
         >
           <BottomSheetView style={styles.rpeModalContent}>
             <Text style={styles.rpeModalTitle}>RPE</Text>
@@ -2785,8 +2897,9 @@ const handleTimerCompletion = async () => {
           backgroundStyle={styles.bottomSheetBackground}
           handleIndicatorStyle={styles.bottomSheetIndicator}
           backdropComponent={renderBackdrop}
+          android_keyboardInputMode="adjustResize"
         >
-          <BottomSheetView style={styles.setEditBottomSheetContent}>
+          <BottomSheetView style={[styles.setEditBottomSheetContent, Platform.OS === 'android' && { height: 300 }]}>
             <View style={styles.setEditHeader}>
               <Text style={styles.setEditTitle}>
                 {editingExerciseIndex !== null && activeWorkout?.exercises[editingExerciseIndex] 
@@ -4321,11 +4434,42 @@ pickerContainer: {
   picker: {
     width: 80,
     height: 150,
+    flex: 1,
   },
   
   pickerItem: {
     fontSize: 18,
     color: colors.primaryText,
+  },
+  
+  // Android Inline Picker Styles
+  androidInlinePicker: {
+    height: 150,
+    width: '100%',
+    backgroundColor: colors.secondaryAccent,
+  },
+  
+  androidInlinePickerItem: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  
+  androidInlinePickerItemSelected: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 8,
+  },
+  
+  androidInlinePickerText: {
+    fontSize: 16,
+    color: colors.primaryText,
+    textAlign: 'center',
+  },
+  
+  androidInlinePickerTextSelected: {
+    color: colors.brand,
+    fontWeight: '600',
   },
     keyboardDismissOverlay: {
     position: 'absolute',
