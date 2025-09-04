@@ -28,6 +28,8 @@ export default {
       }
     },
     android: {
+      package: "com.atlasfitness.atlas",
+      versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
@@ -45,7 +47,7 @@ export default {
     notification: {
       icon: "./assets/icon.png",
       color: "#ffffff",
-      sounds: ["./assets/sounds/timer-complete.mp3"]
+      sounds: ["./assets/sounds/timercomplete.mp3"]
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -70,7 +72,7 @@ export default {
         {
           icon: "./assets/icon.png",
           color: "#ffffff",
-          sounds: ["./assets/sounds/timer-complete.mp3"]
+          sounds: ["./assets/sounds/timercomplete.mp3"]
         }
       ],
       [

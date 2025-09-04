@@ -55,9 +55,9 @@ const playTimerSoundPreview = async (soundType) => {
   try {
     switch (soundType) {
       case 'bell':
-        // Play the actual timer-complete.mp3 sound
+        // Play the actual timercomplete.mp3 sound
         const { sound } = await Audio.Sound.createAsync(
-          require('../../../assets/sounds/timer-complete.mp3'),
+          require('../../../assets/sounds/timercomplete.mp3'),
           { shouldPlay: true, volume: 0.8 }
         );
         // Unload after playing

@@ -898,7 +898,7 @@ const handleTimerCompletion = async () => {
       if (timerSoundSetting === 'bell') {
         try {
           const { sound } = await Audio.Sound.createAsync(
-            require('../../../assets/sounds/timer-complete.mp3'),
+            require('../../../assets/sounds/timercomplete.mp3'),
             { shouldPlay: true, volume: 0.8 }
           );
           // Unload after playing
