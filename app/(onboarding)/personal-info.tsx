@@ -33,8 +33,8 @@ export default function PersonalInfo() {
   const [loading, setLoading] = useState(false);
   
   // New fields
-  const [selectedWeightUnit, setSelectedWeightUnit] = useState<WeightUnit>('lbs');
-  const [selectedExperience, setSelectedExperience] = useState<ExperienceLevel>('beginner');
+  const [selectedWeightUnit, setSelectedWeightUnit] = useState<WeightUnit | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<ExperienceLevel | null>(null);
 
   // Check if required fields are filled
   const isFormValid = selectedWeightUnit && selectedExperience;
@@ -142,51 +142,9 @@ export default function PersonalInfo() {
               </Text>
             </View>
 
-            {/* Personal Info Form */}
-            <View style={styles.section}>
-              {/* Full Name */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Full Name</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={fullName}
-                  onChangeText={setFullName}
-                  placeholder="Enter your full name"
-                  placeholderTextColor={colors.secondaryText}
-                  autoCapitalize="words"
-                  autoCorrect={false}
-                />
-              </View>
-
-              {/* Date of Birth */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Date of Birth</Text>
-                <View style={styles.dateInput}>
-                  <Text style={[
-                    styles.dateText,
-                    !dateOfBirth && styles.placeholderText
-                  ]}>
-                    {dateOfBirth ? formatDate(dateOfBirth) : 'Select your date of birth'}
-                  </Text>
-                  <View style={styles.calendarIconContainer}>
-                    <Ionicons name="calendar-outline" size={20} color={colors.secondaryText} />
-                    <DateTimePicker
-                      value={dateOfBirth || new Date()}
-                      mode="date"
-                      display="default"
-                      onChange={handleDateChange}
-                      maximumDate={new Date()}
-                      minimumDate={new Date(1900, 0, 1)}
-                      style={styles.hiddenDatePicker}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-
             {/* Weight Unit Section */}
             <View style={styles.section}>
-              <Text style={styles.inputLabel}>Weight Unit *</Text>
+              <Text style={styles.inputLabel}>Weight Unit</Text>
               
               <View style={styles.buttonRow}>
                 {weightOptions.map((option) => (
@@ -211,7 +169,7 @@ export default function PersonalInfo() {
 
             {/* Workout Experience Section */}
             <View style={styles.section}>
-              <Text style={styles.inputLabel}>Workout Experience *</Text>
+              <Text style={styles.inputLabel}>Workout Experience</Text>
               
               <View style={styles.buttonRow}>
                 {experienceOptions.map((option) => (
@@ -231,6 +189,54 @@ export default function PersonalInfo() {
                     </Text>
                   </TouchableOpacity>
                 ))}
+              </View>
+            </View>
+
+            {/* Personal Info Form */}
+            <View style={styles.section}>
+              {/* Full Name */}
+              <View style={styles.inputContainer}>
+                <View style={styles.labelContainer}>
+                  <Text style={styles.inputLabel}>Full Name</Text>
+                  <Text style={styles.optionalLabel}>optional</Text>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  value={fullName}
+                  onChangeText={setFullName}
+                  placeholder="Enter your full name"
+                  placeholderTextColor={colors.secondaryText}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                />
+              </View>
+
+              {/* Date of Birth */}
+              <View style={styles.inputContainer}>
+                <View style={styles.labelContainer}>
+                  <Text style={styles.inputLabel}>Date of Birth</Text>
+                  <Text style={styles.optionalLabel}>optional</Text>
+                </View>
+                <View style={styles.dateInput}>
+                  <Text style={[
+                    styles.dateText,
+                    !dateOfBirth && styles.placeholderText
+                  ]}>
+                    {dateOfBirth ? formatDate(dateOfBirth) : 'Select your date of birth'}
+                  </Text>
+                  <View style={styles.calendarIconContainer}>
+                    <Ionicons name="calendar-outline" size={20} color={colors.secondaryText} />
+                    <DateTimePicker
+                      value={dateOfBirth || new Date()}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
+                      maximumDate={new Date()}
+                      minimumDate={new Date(1900, 0, 1)}
+                      style={styles.hiddenDatePicker}
+                    />
+                  </View>
+                </View>
               </View>
             </View>
           </View>
@@ -419,5 +425,17 @@ const styles = StyleSheet.create({
   },
   minimalistButtonTextSelected: {
     color: colors.primaryText,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  optionalLabel: {
+    fontSize: 12,
+    fontWeight: '300',
+    color: colors.secondaryText,
+    fontStyle: 'italic',
   },
 });

@@ -21,12 +21,37 @@ import { useOnboardingStore } from '../../stores/onboardingStore';
 
 export default function Username() {
   const router = useRouter();
-  const { session, fetchProfile } = useAuthStore();
+  const { session, fetchProfile, profile } = useAuthStore();
   const { setInOnboardingFlow } = useOnboardingStore();
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  
+  // Ref to store the timeout ID for cleanup
+  const timeoutRef = React.useRef<number | null>(null);
+
+  // Pre-populate username if user already has one from previous incomplete onboarding
+  // Only do this once on initial load, not when user clears the field
+  React.useEffect(() => {
+    if (profile?.username && !hasInitialized) {
+      setUsername(profile.username);
+      setIsAvailable(true); // Their own username is always available to them
+      setHasInitialized(true);
+    } else if (!profile?.username && !hasInitialized) {
+      setHasInitialized(true);
+    }
+  }, [profile?.username, hasInitialized]);
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const checkUsernameAvailability = async (usernameToCheck: string) => {
     if (!usernameToCheck || usernameToCheck.length < 3) {
@@ -38,13 +63,15 @@ export default function Username() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username')
+        .select('username, id')
         .eq('username', usernameToCheck.toLowerCase())
         .maybeSingle();
 
       if (error) throw error;
       
-      setIsAvailable(!data); // Available if no existing user found
+      // Available if no existing user found, OR if the existing user is the current user
+      const isCurrentUser = data?.id === session?.user?.id;
+      setIsAvailable(!data || isCurrentUser);
     } catch (error) {
       console.error('Error checking username:', error);
       setIsAvailable(null);
@@ -54,18 +81,30 @@ export default function Username() {
   };
 
   const handleUsernameChange = (text: string) => {
+    // Clear any existing timeout to prevent stacking requests
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    
     // Only allow alphanumeric characters and underscores
     const cleanText = text.toLowerCase().replace(/[^a-z0-9_]/g, '');
     setUsername(cleanText);
     
-    // Check availability after a short delay
-    if (cleanText !== text) return; // Don't check if we had to clean the input
+    // Reset availability state when user types
+    setIsAvailable(null);
+    setChecking(false);
     
-    const timeoutId = setTimeout(() => {
+    // Don't check if we had to clean the input or if too short
+    if (cleanText !== text || cleanText.length < 3) return;
+    
+    // Set checking state immediately for better UX
+    setChecking(true);
+    
+    timeoutRef.current = setTimeout(() => {
       checkUsernameAvailability(cleanText);
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
+      timeoutRef.current = null;
+    }, 800); // Increased delay for less flickering
   };
 
   const handleContinue = async () => {
@@ -108,7 +147,7 @@ export default function Username() {
     }
   };
 
-  const isValidUsername = username.length >= 3 && isAvailable === true;
+  const isValidUsername = username.length >= 3 && isAvailable === true && !checking;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -152,10 +191,13 @@ export default function Username() {
               autoCorrect={false}
               maxLength={30}
             />
+            {checking && username.length >= 3 && (
+              <ActivityIndicator size="small" color={colors.brand} style={styles.statusIcon} />
+            )}
             {!checking && isAvailable === true && (
               <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={styles.statusIcon} />
             )}
-            {!checking && isAvailable === false && (
+            {!checking && isAvailable === false && username.length >= 3 && (
               <Ionicons name="close-circle" size={20} color="#F44336" style={styles.statusIcon} />
             )}
           </View>
@@ -167,7 +209,7 @@ export default function Username() {
           {isAvailable === false && (
             <Text style={styles.errorText}>Username is not available</Text>
           )}
-          {isAvailable === true && (
+          {isAvailable && (
             <Text style={styles.successText}>Username is available!</Text>
           )}
           
@@ -180,16 +222,18 @@ export default function Username() {
       {/* Bottom Section */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
-                activeOpacity={0.5} 
+          activeOpacity={0.5} 
           style={[styles.continueButton, !isValidUsername && styles.continueButtonDisabled]} 
           onPress={handleContinue}
-          disabled={!isValidUsername || loading}
+          disabled={!isValidUsername || loading || checking}
         >
-            <>
-              <Text style={[styles.continueButtonText, !isValidUsername && styles.continueButtonTextDisabled]}>
-                Continue
-              </Text>
-            </>
+          {loading ? (
+            <ActivityIndicator size="small" color={colors.primaryText} />
+          ) : (
+            <Text style={[styles.continueButtonText, !isValidUsername && styles.continueButtonTextDisabled]}>
+              Continue
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>

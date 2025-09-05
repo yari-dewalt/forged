@@ -14,7 +14,7 @@ import { StatusBar } from 'react-native';
 export default function RootLayout() {
   // Get state and actions from auth store
   const { session, loading, setSession, setLoading, fetchProfile, profile } = useAuthStore();
-  const { isOnboardingComplete, isLoading: onboardingLoading, isInOnboardingFlow, checkOnboardingStatus } = useOnboardingStore();
+  const { isOnboardingComplete, isInOnboardingFlow, checkOnboardingStatus } = useOnboardingStore();
   const { fetchNotifications, subscribeToNotifications } = useNotificationStore();
   
   // Initialize push notifications
@@ -79,7 +79,6 @@ export default function RootLayout() {
   // Check onboarding status when profile changes
   useEffect(() => {
     if (!loading && session?.user && profile !== undefined) {
-      console.log('Checking onboarding status...');
       checkOnboardingStatus(profile);
     }
   }, [profile, loading, session, checkOnboardingStatus]);
@@ -101,9 +100,6 @@ export default function RootLayout() {
   // Handle routing based on auth state and onboarding status
   useEffect(() => {
     if (loading) return; // Only check auth loading
-    
-    // If onboarding is loading but only when we have a session
-    if (session && onboardingLoading) return;
 
     // Allow legal pages to be accessed from anywhere
     if (inLegalGroup) return;
@@ -114,7 +110,7 @@ export default function RootLayout() {
         router.replace('/(auth)/auth');
       }
     } else {
-      // Has session - check onboarding status
+      // Has session - check onboarding status from profile
       if (!isOnboardingComplete || isInOnboardingFlow) {
         // Needs onboarding or is currently in the flow
         if (!inOnboardingGroup) {
@@ -127,11 +123,11 @@ export default function RootLayout() {
         }
       }
     }
-  }, [session, segments, loading, onboardingLoading, isOnboardingComplete, isInOnboardingFlow]);
+  }, [session, segments, loading, isOnboardingComplete, isInOnboardingFlow]);
 
   // Handle fade-in animation when loading completes
   useEffect(() => {
-    if (!loading && !(session && onboardingLoading)) {
+    if (!loading) {
       // Fade out logo
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -153,10 +149,10 @@ export default function RootLayout() {
         useNativeDriver: true,
       }).start();
     }
-  }, [loading, session, onboardingLoading, fadeAnim, contentOpacity]);
+  }, [loading, fadeAnim, contentOpacity]);
 
   // Show loading screen with Atlas logo
-  if (loading || (session && onboardingLoading)) {
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>

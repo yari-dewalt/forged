@@ -16,8 +16,7 @@ import { autoFollowFounders } from '../../utils/founderUtils';
 
 export default function Complete() {
   const router = useRouter();
-  const { markOnboardingComplete } = useOnboardingStore();
-  const { session } = useAuthStore();
+  const { markOnboardingComplete, session } = useAuthStore();
 
   const handleStartUsing = async () => {
     // Auto-follow founders for new users after completing all onboarding steps

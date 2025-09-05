@@ -10,6 +10,7 @@ type UserProfile = {
   avatar_url: string | null;
   weight_unit?: 'lbs' | 'kg' | null;
   date_of_birth?: string | null;
+  onboarding_completed?: boolean | null;
 };
 
 type AuthState = {
@@ -23,6 +24,7 @@ type AuthState = {
   signOut: () => Promise<void>;
   fetchProfile: () => Promise<void>;
   updateProfile: (updatedProfile: UserProfile) => void;
+  markOnboardingComplete: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -49,7 +51,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, username, name, bio, avatar_url, weight_unit, date_of_birth")
+        .select("id, username, name, bio, avatar_url, weight_unit, date_of_birth, onboarding_completed")
         .eq("id", session.user.id)
         .single();
       
@@ -66,5 +68,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   updateProfile: (updatedProfile: UserProfile) => {
     set({ profile: updatedProfile });
+  },
+
+  markOnboardingComplete: async () => {
+    const { session, profile } = get();
+    if (!session?.user || !profile) return;
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ onboarding_completed: true })
+        .eq("id", session.user.id);
+
+      if (error) throw error;
+
+      // Update local state
+      set({ 
+        profile: { 
+          ...profile, 
+          onboarding_completed: true 
+        } 
+      });
+    } catch (error) {
+      console.error("Error marking onboarding complete:", error);
+      throw error;
+    }
   },
 }));
