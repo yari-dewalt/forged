@@ -117,7 +117,7 @@ export default function AppLayout() {
     return ({ focused }: { focused: boolean }) => (
       <Text 
         style={{ 
-          fontWeight: focused ? '700' : '500',
+          fontWeight: focused ? '600' : '400',
           fontSize: 10,
           color: focused ? colors.brand : colors.primaryText,
           marginTop: 2,
@@ -132,7 +132,7 @@ export default function AppLayout() {
   const createTabBarIcon = (IconComponent) => {
     return ({ color, focused }: { color: string, focused: boolean }) => (
       <View style={{ opacity: focused ? 1 : 0.7 }}>
-        {IconComponent({ color })}
+        {IconComponent({ color, focused })}
       </View>
     );
   };
@@ -161,7 +161,9 @@ export default function AppLayout() {
           name="home"
           options={{
             tabBarLabel: createTabBarLabel('Home'),
-            tabBarIcon: createTabBarIcon(({ color }) => <IonIcon name="home" size={28} color={color} />),
+            tabBarIcon: createTabBarIcon(({ color, focused }) => (
+              <IonIcon name={focused ? "home" : "home-outline"} size={28} color={color} />
+            )),
           }}
           listeners={{
             tabPress: (e) => {
@@ -173,7 +175,9 @@ export default function AppLayout() {
           name="explore"
           options={{
             tabBarLabel: createTabBarLabel('Explore'),
-            tabBarIcon: createTabBarIcon(({ color }) => <IonIcon name="globe-outline" size={28} color={color} />),
+            tabBarIcon: createTabBarIcon(({ color, focused }) => (
+              <IonIcon name={focused ? "globe" : "globe-outline"} size={28} color={color} />
+            )),
           }}
           listeners={{
             tabPress: (e) => {
@@ -185,9 +189,9 @@ export default function AppLayout() {
           name="workout"
           options={{
             tabBarLabel: createTabBarLabel('Workout'),
-            tabBarIcon: createTabBarIcon(({ color }) => (
+            tabBarIcon: createTabBarIcon(({ color, focused }) => (
               <View>
-                <IonIcon name="barbell" size={28} color={color} />
+                <IonIcon name={focused ? "barbell" : "barbell-outline"} size={28} color={color} />
                 {activeWorkout && (
                   <View style={styles.workoutIndicator}>
                     {isPaused ? (
@@ -210,7 +214,9 @@ export default function AppLayout() {
           name="clubs/index"
           options={{
             tabBarLabel: createTabBarLabel('Clubs'),
-            tabBarIcon: createTabBarIcon(({ color }) => <IonIcon name="people" size={28} color={color} />),
+            tabBarIcon: createTabBarIcon(({ color, focused }) => (
+              <IonIcon name={focused ? "people" : "people-outline"} size={28} color={color} />
+            )),
           }}
           listeners={{
             tabPress: (e) => {
