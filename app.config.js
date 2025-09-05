@@ -29,7 +29,7 @@ export default {
     },
     android: {
       package: "com.atlasfitness.atlas",
-      versionCode: 1,
+      versionCode: 2,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
