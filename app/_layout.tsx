@@ -8,6 +8,7 @@ import { useNotificationStore } from '../stores/notificationStore';
 import { usePushNotifications } from '../hooks/usePushNotifications';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { colors } from '../constants/colors';
+import { StatusBar } from 'react-native';
 
 // Root layout component
 export default function RootLayout() {
@@ -171,20 +172,24 @@ export default function RootLayout() {
 
   // No need for Context.Provider when using Zustand
   return (
-    <Animated.View style={[styles.container, { opacity: contentOpacity }]}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(app)" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(legal)" />
-        <Stack.Screen name="(onboarding)" />
-      </Stack>
-    </Animated.View>
+    <>
+      <StatusBar hidden />
+      <Animated.View style={[styles.container, { opacity: contentOpacity }]}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(app)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(legal)" />
+          <Stack.Screen name="(onboarding)" />
+        </Stack>
+      </Animated.View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
