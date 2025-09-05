@@ -6,6 +6,7 @@ export const FOUNDER_USER_IDS = [
   '48501e5b-2e50-4187-b2cc-3b8ad20e1fa1', // Yari
   '6106f9a5-c78e-4d1d-85eb-b37a50f1ae6e', // Elijah
   '2f883a74-65f8-4890-81fe-0d2e4c1241a5', // Zoey
+  'd2345946-30e2-4ef2-bebc-89b7e0c0e92c', // Atlas Account
 ];
 
 // Function to auto-follow all founders when a new user signs up
