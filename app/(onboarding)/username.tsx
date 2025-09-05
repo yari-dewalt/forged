@@ -36,8 +36,9 @@ export default function Username() {
   // Only do this once on initial load, not when user clears the field
   React.useEffect(() => {
     if (profile?.username && !hasInitialized) {
-      setUsername(profile.username);
-      setIsAvailable(true); // Their own username is always available to them
+      // Don't pre-populate - always start with empty for better UX
+      // setUsername(profile.username);
+      // setIsAvailable(true);
       setHasInitialized(true);
     } else if (!profile?.username && !hasInitialized) {
       setHasInitialized(true);
@@ -209,7 +210,7 @@ export default function Username() {
           {isAvailable === false && (
             <Text style={styles.errorText}>Username is not available</Text>
           )}
-          {isAvailable && (
+          {isAvailable === true && (
             <Text style={styles.successText}>Username is available!</Text>
           )}
           
