@@ -665,7 +665,6 @@ const Post = ({ data, onDelete, isDetailView = false }) => {
             <TouchableOpacity
                 activeOpacity={0.5} 
               onPress={toggleLiked} 
-              disabled={isLikeLoading}
             >
                 <AntDesign 
                   name={liked ? "like1" : "like2"} 
