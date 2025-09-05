@@ -6,6 +6,8 @@ import { supabase } from '../../../../../lib/supabase';
 import Post from '../../../../../components/Post/Post';
 import { colors } from '../../../../../constants/colors';
 import PostSkeleton from '../../../../../components/Post/PostSkeleton';
+import { checkIfUserLikedPost } from '../../../../../utils/postUtils';
+import { useAuthStore } from '../../../../../stores/authStore';
 
 export default function PostDetailScreen() {
   const { postId } = useLocalSearchParams();
@@ -13,6 +15,7 @@ export default function PostDetailScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
+  const { session } = useAuthStore();
 
   useEffect(() => {
     if (postId) {
@@ -35,6 +38,9 @@ export default function PostDetailScreen() {
           likes_count,
           user_id,
           workout_id,
+          profiles:user_id(id, username, avatar_url, full_name),
+          post_likes(count),
+          post_comments(count),
           post_media(id, storage_path, media_type, width, height, duration, order_index)
         `)
         .eq('id', postId)
@@ -56,14 +62,19 @@ export default function PostDetailScreen() {
           console.log('Profile fetch error:', profileError);
         }
 
+        let hasLiked = false;
+        if (session?.user?.id) {
+          hasLiked = await checkIfUserLikedPost(data.id, session.user.id);
+        }
+
         // Transform the post data to match the Post component's expected format
         const formattedPost = {
           id: data.id,
           user: {
-            id: profileData?.id || data.user_id,
+            id: profileData?.id,
             username: profileData?.username,
             full_name: profileData?.full_name,
-            avatar_url: profileData?.avatar_url || null
+            avatar_url: profileData?.avatar_url
           },
           createdAt: data.created_at,
           title: data.title,
@@ -80,7 +91,8 @@ export default function PostDetailScreen() {
             duration: media.duration,
             order_index: media.order_index
           })).sort((a, b) => a.order_index - b.order_index) : [],
-          likes: data.likes_count || 0,
+          likes: data.likes_count || (data.post_likes?.[0]?.count || 0),
+          is_liked: hasLiked,
           comments: []
         };
         

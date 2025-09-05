@@ -44,6 +44,9 @@ const Posts = () => {
           likes_count,
           user_id,
           workout_id,
+          profiles:user_id(id, username, avatar_url, full_name),
+          post_likes(count),
+          post_comments(count),
           post_media(id, storage_path, media_type, width, height, duration, order_index)
         `)
         .eq('user_id', profileId)
@@ -64,10 +67,10 @@ const Posts = () => {
         return {
           id: post.id,
           user: {
-            id: profileData?.id || post.user_id,
+            id: profileData?.id,
             username: profileData?.username,
             full_name: profileData?.full_name,
-            avatar_url: profileData?.avatar_url || null
+            avatar_url: profileData?.avatar_url
           },
           createdAt: post.created_at,
           title: post.title,
@@ -84,7 +87,7 @@ const Posts = () => {
             duration: media.duration,
             order_index: media.order_index
           })).sort((a, b) => a.order_index - b.order_index) : [],
-          likes: post.likes_count || 0,
+          likes: post.likes_count || (post.post_likes?.[0]?.count || 0),
           is_liked: hasLiked,
           comments: []
         };
