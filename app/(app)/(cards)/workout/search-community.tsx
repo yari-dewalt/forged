@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     paddingHorizontal: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -655,7 +655,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,

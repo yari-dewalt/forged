@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 24,
