@@ -121,7 +121,6 @@ export default function AppLayout() {
           fontSize: 10,
           color: focused ? colors.brand : colors.primaryText,
           marginTop: 2,
-          opacity: focused ? 1 : 0.7, // Add opacity when not focused
         }}
       >
         {label}
@@ -131,7 +130,7 @@ export default function AppLayout() {
 
   const createTabBarIcon = (IconComponent) => {
     return ({ color, focused }: { color: string, focused: boolean }) => (
-      <View style={{ opacity: focused ? 1 : 0.7 }}>
+      <View>
         {IconComponent({ color, focused })}
       </View>
     );
@@ -145,12 +144,13 @@ export default function AppLayout() {
           tabBarInactiveTintColor: colors.primaryText,
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: colors.primaryAccent,
-            borderTopWidth: 0,
+            backgroundColor: colors.background,
             elevation: 0,
             shadowOpacity: 0,
             height: 86,
             paddingBottom: 30,
+            borderTopWidth: 1,
+            borderTopColor: colors.whiteOverlayLight,
           },
           tabBarItemStyle: {
             padding: 5,
@@ -176,7 +176,7 @@ export default function AppLayout() {
           options={{
             tabBarLabel: createTabBarLabel('Explore'),
             tabBarIcon: createTabBarIcon(({ color, focused }) => (
-              <IonIcon name={focused ? "globe" : "globe-outline"} size={28} color={color} />
+              <IonIcon name={focused ? "globe-outline" : "globe-outline"} size={28} color={color} />
             )),
           }}
           listeners={{

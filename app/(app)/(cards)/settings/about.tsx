@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     height: 120,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 24,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     overflow: 'hidden',
   },
   sectionTitle: {

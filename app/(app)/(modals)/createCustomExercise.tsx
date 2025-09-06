@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
   },  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: colors.whiteOverlay,
@@ -595,7 +595,7 @@ disabledText: {
     flex: 1,
   },
   textInput: {
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
@@ -612,7 +612,7 @@ disabledText: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,

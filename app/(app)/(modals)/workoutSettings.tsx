@@ -339,8 +339,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   section: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    marginHorizontal: 16,
+    backgroundColor: colors.background,
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -376,7 +375,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   simpleTimeInput: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 6,
     padding: 8,
     fontSize: 16,
@@ -423,9 +422,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'space-between', // Changed from 'center'
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
     paddingVertical: 10,
     paddingHorizontal: 12,
     paddingTop: 53,

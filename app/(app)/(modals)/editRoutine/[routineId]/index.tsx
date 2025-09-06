@@ -1008,7 +1008,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: colors.whiteOverlay,

@@ -2998,7 +2998,7 @@ const mockRoutines = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     paddingTop: 50,
   },
   contentContainer: {
@@ -3009,9 +3009,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'space-between',
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
@@ -4549,9 +4550,9 @@ pickerContainer: {
     left: 0,
     right: 0,
     zIndex: 1,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomColor: colors.whiteOverlay,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,

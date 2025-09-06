@@ -1506,9 +1506,9 @@ export default function ProfileScreen() {
                         yAxisInterval={1} // Show labels at max and min values
                         onDataPointClick={handleChartAreaPress}
                         chartConfig={{
-                          backgroundColor: colors.primaryAccent,
-                          backgroundGradientFrom: colors.primaryAccent,
-                          backgroundGradientTo: colors.primaryAccent,
+                          backgroundColor: colors.background,
+                          backgroundGradientFrom: colors.background,
+                          backgroundGradientTo: colors.background,
                           decimalPlaces: 0,
                           color: (opacity = 1) => colors.brand, // Full brand color for line
                           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -1519,7 +1519,7 @@ export default function ProfileScreen() {
                             r: '4',
                             strokeWidth: '2',
                             stroke: colors.brand,
-                            fill: colors.primaryAccent, // Hollow dots by default
+                            fill: colors.background, // Hollow dots by default
                           },
                           // Customize grid lines
                           propsForBackgroundLines: {
@@ -1590,7 +1590,7 @@ export default function ProfileScreen() {
           )}
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, { borderBottomWidth: 0 }]}>
           <View style={styles.menuContainer}>
             <TouchableOpacity
                 activeOpacity={0.5} 
@@ -1795,7 +1795,9 @@ const styles = StyleSheet.create({
   profileHeader: {
     padding: 20,
     gap: 10,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   profileHeaderFirstRow: {
     flexDirection: 'row',
@@ -1854,7 +1856,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   section: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   menuContainer: {
     padding: 0,
@@ -1865,6 +1869,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -1939,7 +1945,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   controlButton: {
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -1978,7 +1984,7 @@ const styles = StyleSheet.create({
     height: 220,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     borderRadius: 16,
   },
   chartEmptyText: {
@@ -2132,7 +2138,7 @@ const styles = StyleSheet.create({
   selectedPointStatsContainer: {
     paddingHorizontal: 20,
     marginBottom: 10,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
   },
   selectedPointDateContainer: {
     flexDirection: 'row',

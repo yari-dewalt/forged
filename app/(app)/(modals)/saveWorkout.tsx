@@ -422,9 +422,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     justifyContent: 'space-between',
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
     paddingVertical: 10,
     paddingHorizontal: 12,
     paddingTop: 53, // Account for status bar

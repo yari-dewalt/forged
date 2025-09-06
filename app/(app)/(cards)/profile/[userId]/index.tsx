@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, Modal, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, Modal, TouchableOpacity, Image } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { colors } from '../../../../../constants/colors';
@@ -18,6 +18,7 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetView, BottomSheetScrollVie
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import VideoThumbnail from '../../../../../components/VideoThumbnail';
+import { setTabScrollRef } from '../../../(tabs)/_layout';
 
 export default function ProfileScreen() {
   const scrollViewRef = useRef(null);
@@ -62,6 +63,8 @@ export default function ProfileScreen() {
   
   // Bottom sheet snap points
   const snapPoints = useMemo(() => ['40%'], []);
+
+  useEffect(() => {setTabScrollRef('profile', scrollViewRef.current);}, []);
   
   // Backdrop component
   const renderBackdrop = useCallback(
@@ -105,29 +108,29 @@ export default function ProfileScreen() {
   }, [currentProfile?.id]);
 
   // Refresh profile data when screen comes into focus (e.g., after deleting a routine or post)
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     // Skip on initial mount to prevent fetching wrong profile data
-  //     if (isInitialMount.current) {
-  //       isInitialMount.current = false;
-  //       return;
-  //     }
+  useFocusEffect(
+    useCallback(() => {
+      // Skip on initial mount to prevent fetching wrong profile data
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+      }
 
-  //     if (currentProfile?.id && session?.user?.id) {
-  //       console.log('Profile screen focused - refreshing data for profile ID:', currentProfile.id);
+      if (currentProfile?.id && session?.user?.id) {
+        console.log('Profile screen focused - refreshing data for profile ID:', currentProfile.id);
         
-  //       // Refresh profile data to ensure posts_count is up-to-date
-  //       fetchProfile(currentProfile.id, session.user.id, false);
+        // Refresh profile data to ensure posts_count is up-to-date
+        fetchProfile(currentProfile.id, session.user.id, false);
         
-  //       // Refresh other data without showing loading spinners
-  //       fetchLatestPost(currentProfile.id, false);
-  //       fetchRecentWorkouts(currentProfile.id, false);
-  //       fetchRoutines(currentProfile.id, false);
-  //       fetchRecentMedia(currentProfile.id, false);
-  //       // Note: Not refreshing workoutDays and activity data as they change less frequently
-  //     }
-  //   }, [currentProfile?.id, session?.user?.id])
-  // );
+        // Refresh other data without showing loading spinners
+        fetchLatestPost(currentProfile.id, false);
+        fetchRecentWorkouts(currentProfile.id, false);
+        fetchRoutines(currentProfile.id, false);
+        fetchRecentMedia(currentProfile.id, false);
+        // Note: Not refreshing workoutDays and activity data as they change less frequently
+      }
+    }, [currentProfile?.id, session?.user?.id])
+  );
 
   // Enhanced chart area press handler for tapping anywhere
   const handleChartAreaPress = (event: any) => {
@@ -1488,7 +1491,7 @@ export default function ProfileScreen() {
                 <View style={styles.chartWrapper}>
                   <PanGestureHandler onGestureEvent={handlePanGesture}>
                     <Pressable
-                onPress={handleChartAreaPress} style={styles.chartPressable}>
+                      onPress={handleChartAreaPress} style={styles.chartPressable}>
                       <LineChart
                         data={{
                           ...activityData,
@@ -1503,9 +1506,9 @@ export default function ProfileScreen() {
                         yAxisInterval={1} // Show labels at max and min values
                         onDataPointClick={handleChartAreaPress}
                         chartConfig={{
-                          backgroundColor: colors.primaryAccent,
-                          backgroundGradientFrom: colors.primaryAccent,
-                          backgroundGradientTo: colors.primaryAccent,
+                          backgroundColor: colors.background,
+                          backgroundGradientFrom: colors.background,
+                          backgroundGradientTo: colors.background,
                           decimalPlaces: 0,
                           color: (opacity = 1) => colors.brand, // Full brand color for line
                           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -1516,7 +1519,7 @@ export default function ProfileScreen() {
                             r: '4',
                             strokeWidth: '2',
                             stroke: colors.brand,
-                            fill: colors.primaryAccent, // Hollow dots by default
+                            fill: colors.background, // Hollow dots by default
                           },
                           // Customize grid lines
                           propsForBackgroundLines: {
@@ -1587,7 +1590,7 @@ export default function ProfileScreen() {
           )}
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, { borderBottomWidth: 0 }]}>
           <View style={styles.menuContainer}>
             <TouchableOpacity
                 activeOpacity={0.5} 
@@ -1792,7 +1795,9 @@ const styles = StyleSheet.create({
   profileHeader: {
     padding: 20,
     gap: 10,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   profileHeaderFirstRow: {
     flexDirection: 'row',
@@ -1851,7 +1856,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   section: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   menuContainer: {
     padding: 0,
@@ -1862,6 +1869,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -1936,7 +1945,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   controlButton: {
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -1975,7 +1984,7 @@ const styles = StyleSheet.create({
     height: 220,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     borderRadius: 16,
   },
   chartEmptyText: {
@@ -2129,7 +2138,7 @@ const styles = StyleSheet.create({
   selectedPointStatsContainer: {
     paddingHorizontal: 20,
     marginBottom: 10,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
   },
   selectedPointDateContainer: {
     flexDirection: 'row',

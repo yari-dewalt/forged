@@ -898,7 +898,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
   },
   postHeader: {
     width: '100%',
@@ -1152,7 +1152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 12,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     gap: 12,
   },
   commentPreview: {
@@ -1195,7 +1195,6 @@ const styles = StyleSheet.create({
   },
   addCommentInput: {
     flex: 1,
-    opacity: 0.3,
     justifyContent: 'center',
     borderRadius: 8,
     borderWidth: 0.5,

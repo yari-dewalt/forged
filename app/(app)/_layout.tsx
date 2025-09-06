@@ -40,7 +40,7 @@ const TopNavBar = () => {
   const isModalRoute = pathname.includes('editPost') || pathname.includes('editRoutine');
   const isPostRoute = pathname.includes('/post/');
   const isClubRoute = pathname.includes('/clubs/');
-  const isExploreRoute = pathname.includes('/explore/');
+  const isExploreRoute = pathname.includes('/explore');
   const isRecentSearchesRoute = pathname.includes('/explore/recentSearches');
   const isNotificationRoute = pathname.includes('/notifications');
   const isMessagesRoute = pathname.includes('/messages');
@@ -54,7 +54,7 @@ const TopNavBar = () => {
   const isRoutineSpecificRoute = pathname.includes('/routine/');
   const isEditRoutineRoute = pathname.includes('/editRoutine/');
   const isRoutineMainRoute = pathname.includes('/routines') && !isRoutineSpecificRoute;
-  const isMainTab = !isProfileRoute && !isModalRoute && !isPostRoute && !isClubRoute && !isExploreRoute && !isNotificationRoute && !isMessagesRoute && !isNewMessageRoute && !isConversationRoute && !isSettingsRoute && !isWorkoutMainRoute && !isWorkoutSpecificRoute && !isRoutineMainRoute && !isRoutineSpecificRoute && !isEditRoutineRoute;
+  const isMainTab = !isProfileRoute && !isModalRoute && !isPostRoute && !isClubRoute && !isNotificationRoute && !isMessagesRoute && !isNewMessageRoute && !isConversationRoute && !isSettingsRoute && !isWorkoutMainRoute && !isWorkoutSpecificRoute && !isRoutineMainRoute && !isRoutineSpecificRoute && !isEditRoutineRoute;
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -306,7 +306,7 @@ const TopNavBar = () => {
         {!isWorkoutMainRoute && (
           <View style={styles.headerLeft}>
             {/* Back button for profile/modal routes */}
-            {((isProfileRoute || isModalRoute || isPostRoute || isClubRoute || isExploreRoute || isNotificationRoute || isMessagesRoute || isNewMessageRoute || isConversationRoute || isSettingsRoute || isWorkoutSpecificRoute || isRoutineSpecificRoute) && !pathname.endsWith('/profile')) ? (
+            {((isProfileRoute || isModalRoute || isPostRoute || isClubRoute || isNotificationRoute || isMessagesRoute || isNewMessageRoute || isConversationRoute || isSettingsRoute || isWorkoutSpecificRoute || isRoutineSpecificRoute) && !pathname.endsWith('/profile')) ? (
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.headerButton}
@@ -591,14 +591,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   safeArea: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
   },
   header: {
     height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     position: 'relative',
     borderBottomWidth: 1,
     borderBottomColor: colors.whiteOverlayLight,

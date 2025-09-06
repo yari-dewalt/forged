@@ -419,7 +419,7 @@ export default function Workout() {
             style={styles.quickActionButton}
             onPress={() => router.push("/editRoutine/new")}
           >
-            <IonIcon name="add-circle-outline" size={20} color={colors.brand} />
+            <IonIcon name="add-circle-outline" size={20} color={colors.primaryText} />
             <Text style={styles.quickActionText}>Create New</Text>
           </TouchableOpacity>
           
@@ -428,7 +428,7 @@ export default function Workout() {
             style={styles.quickActionButton}
             onPress={() => router.push("/workout/explore")}
           >
-            <IonIcon name="search-outline" size={20} color={colors.brand} />
+            <IonIcon name="search-outline" size={20} color={colors.primaryText} />
             <Text style={styles.quickActionText}>Explore</Text>
           </TouchableOpacity>
         </View>
@@ -635,7 +635,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   quickActionText: {
-    color: colors.brand,
+    color: colors.primaryText,
     fontWeight: '600',
     marginLeft: 6,
     fontSize: 14,

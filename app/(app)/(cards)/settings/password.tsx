@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   section: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     padding: 20,
     marginBottom: 20,
   },

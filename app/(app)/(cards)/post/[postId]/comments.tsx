@@ -126,6 +126,9 @@ export default function PostCommentsScreen() {
           likes_count,
           user_id,
           workout_id,
+          profiles:user_id(id, username, avatar_url, full_name),
+          post_likes(count),
+          post_comments(count),
           post_media(id, storage_path, media_type, width, height, duration, order_index)
         `)
         .eq('id', postId)
@@ -147,26 +150,42 @@ export default function PostCommentsScreen() {
           console.log('Profile fetch error:', profileError);
         }
 
+        let hasLiked = false;
+        if (session?.user?.id) {
+          hasLiked = await checkIfUserLikedPost(postData.id, session.user.id);
+        }
+
         // Transform the post data (simplified version without media gallery)
         const formattedPost = {
           id: postData.id,
           user: {
-            id: profileData?.id || postData.user_id,
+            id: profileData?.id,
             username: profileData?.username,
             full_name: profileData?.full_name,
-            avatar_url: profileData?.avatar_url || null
+            avatar_url: profileData?.avatar_url
           },
           createdAt: postData.created_at,
           title: postData.title,
           text: postData.description,
           workout_id: postData.workout_id,
-          media: [], // Empty media for comments view
-          likes: postData.likes_count || 0,
+          media: postData.post_media ? postData.post_media.map(media => ({
+            id: media.id,
+            type: media.media_type,
+            uri: media.storage_path.startsWith('http') 
+              ? media.storage_path 
+              : `${process.env.EXPO_PUBLIC_SUPABASE_URL}/storage/v1/object/public/user-content/${media.storage_path}`,
+            width: media.width,
+            height: media.height,
+            duration: media.duration,
+            order_index: media.order_index
+          })).sort((a, b) => a.order_index - b.order_index) : [],
+          likes: postData.likes_count || (postData.post_likes?.[0]?.count || 0),
+          is_liked: hasLiked,
           comments: []
         };
         
         setPost(formattedPost);
-        setLikesCount(postData.likes_count || 0);
+        setLikesCount(formattedPost.likes);
 
         // Check if user has liked this post
         if (session?.user?.id) {
@@ -1292,7 +1311,7 @@ export default function PostCommentsScreen() {
   },
   container: {
     flex: 1,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
   },
   darkOverlay: {
     position: 'absolute',
@@ -1335,10 +1354,12 @@ export default function PostCommentsScreen() {
     paddingBottom: 20,
   },
   postContainer: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 16,
+        borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   postHeader: {
     flexDirection: 'row',
@@ -1430,13 +1451,15 @@ export default function PostCommentsScreen() {
     paddingHorizontal: 20,
     paddingVertical: 12,
     gap: 12,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.whiteOverlay,
   },
   commentItemHighlighted: {
     backgroundColor: colors.whiteOverlay || 'rgba(255, 255, 255, 0.08)',
   },
   commentItemEditing: {
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
   },
   commentAvatar: {
     marginTop: 2,
@@ -1535,7 +1558,7 @@ export default function PostCommentsScreen() {
     paddingHorizontal: 16,
     paddingVertical: 8,
     paddingBottom: 32,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
     borderTopWidth: 0.5,
     borderTopColor: colors.whiteOverlay,
     zIndex: 1,
@@ -1595,7 +1618,7 @@ export default function PostCommentsScreen() {
   },
   inputContainer: {
     flex: 1,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.primaryAccent,
     borderRadius: 8,
     borderWidth: 0.5,
     borderColor: colors.whiteOverlay,
@@ -1783,7 +1806,7 @@ export default function PostCommentsScreen() {
     justifyContent: 'center',
     paddingVertical: 48,
     paddingHorizontal: 24,
-    backgroundColor: colors.secondaryAccent,
+    backgroundColor: colors.background,
   },
   emptyCommentsIcon: {
     marginBottom: 16,

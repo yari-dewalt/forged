@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   section: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     marginBottom: 20,
   },
   settingItem: {
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   deleteButton: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
   },
   deleteText: {
     color: colors.notification,

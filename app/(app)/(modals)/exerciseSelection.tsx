@@ -1113,10 +1113,10 @@ const styles = StyleSheet.create({
   header: {
   flexDirection: 'row',
   alignItems: 'center',
-  backgroundColor: colors.secondaryAccent,
+  backgroundColor: colors.background,
   justifyContent: 'space-between', // Changed from center
   borderBottomWidth: 1,
-  borderBottomColor: 'rgba(255,255,255,0.1)',
+  borderBottomColor: colors.whiteOverlay,
   paddingVertical: 10, // Reduced from 16
   paddingHorizontal: 12,
   paddingTop: 53, // Increased to match settings page
@@ -1148,12 +1148,12 @@ customText: {
   fontWeight: '400',
 },
   searchFilterContainer: {
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.backgrund,
     paddingHorizontal: 16,
     paddingVertical: 16,
     gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomColor: colors.whiteOverlay,
   },
   searchContainer: {
     flexDirection: 'row',

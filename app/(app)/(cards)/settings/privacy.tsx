@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 24,
-    backgroundColor: colors.primaryAccent,
+    backgroundColor: colors.background,
     overflow: 'hidden',
   },
   sectionTitle: {
